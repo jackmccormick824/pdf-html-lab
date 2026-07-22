@@ -1,0 +1,60 @@
+# Recommendation
+
+## (a) Nice HTML in the browser
+
+**Top pick: Tailwind CSS** if you already have (or are willing to add) a
+build step — it gives the most control per line of markup and keeps a
+design system consistent between your product UI and your reports.
+**Runner-up: Pico.css or Water.css** (classless) when you want a good-looking
+document from plain semantic HTML in minutes, with zero class vocabulary to
+learn — Water.css specifically if you want automatic OS dark/light theming
+with no JavaScript at all. Skip Bootstrap/Bulma unless you specifically want
+their prebuilt component vocabulary (navbars, cards, badges) — they're
+faster to assemble a dashboard from but harder to fully reskin later.
+
+## (b) PDF from HTML
+
+**Top pick: Playwright or Puppeteer** when your report is already (or can be)
+a real HTML/CSS page — they print through actual Chromium, so if it looks
+right in the browser, it looks right in the PDF, including modern CSS, live
+charts, and custom fonts. Prefer Playwright if your team already has it for
+end-to-end testing; otherwise Puppeteer is the more "default" choice.
+**Runner-up: WeasyPrint** if you want to stay in Python and avoid shipping a
+browser binary — its native support for CSS Paged Media (running headers,
+`counter(pages)`, TOC page references, multi-column) is genuinely stronger
+than what Chromium's print engine gives Puppeteer/Playwright, at the cost of
+a Pango/cairo system dependency and no JavaScript execution. Reach for
+**Paged.js** specifically when you need real automatic re-pagination of long
+flowing content in-browser and are fine with a JS polyfill (and its one
+known bug around mixed-orientation named pages, documented in that folder).
+
+## (c) PDF built in code (no browser, no HTML)
+
+**Top pick: ReportLab** (Python) for anything structured and repeatable —
+compliance reports, statements, certificates — where you want a real TOC,
+precise layout control, and a mature, widely-used library. **Runner-up:
+pdf-lib or PDFKit** (JS/Node) if your stack is already JavaScript — pdf-lib
+for merging/editing/watermarking existing PDFs, PDFKit specifically when
+your content is prose-heavy and you want automatic text wrapping rather
+than pdf-lib's raw coordinate placement. If you're on a constrained or
+serverless Python environment where even ReportLab feels heavy, **fpdf2**
+is the lightest install in this entire lab (pure Python, zero system
+dependencies) and covers the same core use cases at a smaller scale.
+
+**Honorable mention, genuinely different category:** if your reports lean
+technical (formulas, structured long-form documents) or you're comfortable
+maintaining native document markup instead of a programming-language API,
+**Typst** produces the best out-of-the-box typography of anything tested in
+this lab — real math typesetting, footnotes, and TOC support in a single
+lightweight binary, no LaTeX install required.
+
+## What we'd actually reach for on a FastAPI + React project
+
+Frontend report preview: **Tailwind**, reusing the app's existing design
+tokens. PDF export of that same page: **Playwright**, called from the
+FastAPI backend, printing the already-styled page — one rendering pass,
+one source of truth for how the report looks on screen and on paper. If a
+report needs to be generated without ever touching a browser (background
+jobs, high volume, tight latency budgets), **ReportLab** on the Python side
+or **pdf-lib**/**PDFKit** on the Node side, depending on which language
+owns that service.
