@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer utilities {
+  .callout-info {
+    @apply rounded-lg border-l-4 p-4 my-4 border-sky-500 bg-sky-50 text-sky-900 dark:bg-sky-950 dark:text-sky-100;
+  }
+  .callout-warning {
+    @apply rounded-lg border-l-4 p-4 my-4 border-amber-500 bg-amber-50 text-amber-900 dark:bg-amber-950 dark:text-amber-100;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  html, body {
+    background: white !important;
+  }
+  .print-avoid-break {
+    break-inside: avoid;
+  }
+  @page {
+    margin: 18mm 14mm;
+  }
+  body {
+    counter-reset: page;
+  }
+  footer .page-number::after {
+    counter-increment: page;
+    content: counter(page);
+  }
+}
