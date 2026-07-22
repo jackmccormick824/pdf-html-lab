@@ -1,0 +1,49 @@
+{# Reusable Jinja2 macros — defined once, called per-customer in report.html.j2.
+   This is the core Jinja2 pitch: without macros, this table + callout markup
+   would be copy-pasted by hand once per customer, like every hand-written
+   HTML example elsewhere in this lab. #}
+
+{% macro invoice_table(invoices) %}
+<table class="invoice-table">
+  <thead>
+    <tr>
+      <th>Invoice #</th>
+      <th>Issued</th>
+      <th>Due</th>
+      <th class="num">Amount</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for inv in invoices %}
+    <tr class="{{ 'row-overdue' if inv.days_overdue > 0 else '' }}">
+      <td>{{ inv.id }}</td>
+      <td>{{ inv.issued | dateformat }}</td>
+      <td>{{ inv.due | dateformat }}</td>
+      <td class="num">{{ inv.amount | usd }}</td>
+      <td>
+        {% if inv.days_overdue > 0 %}
+          <span class="badge badge-overdue">{{ inv.days_overdue }} day{{ 's' if inv.days_overdue != 1 else '' }} overdue</span>
+        {% else %}
+          <span class="badge badge-ok">Current</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="3">Total outstanding</td>
+      <td class="num">{{ invoices | sum(attribute='amount') | usd }}</td>
+      <td></td>
+    </tr>
+  </tfoot>
+</table>
+{% endmacro %}
+
+{% macro callout(kind, title, body) %}
+<div class="callout callout-{{ kind }}">
+  <p class="callout-title">{{ title }}</p>
+  <p>{{ body }}</p>
+</div>
+{% endmacro %}

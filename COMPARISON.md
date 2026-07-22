@@ -20,6 +20,7 @@ no means it's an additional discovery made while researching this lab (see the r
 | MVP.css | CSS only (classless) | MIT | HTML | Trivial | Same niche as Pico/Water | **Not built** — near-identical capability to Pico/Water, would be redundant; noted for transparency instead | Yes | — |
 | Hand-rolled CSS Paged Media | CSS (browser-native) | N/A | HTML → PDF via print | None (built into every browser) | Simple documents, learning the underlying platform | No automatic pagination or real running headers; manual page breaks only | Yes ("custom print styles") | [custom-print-css](intern-pdf-html-lab/custom-print-css) |
 | Paged.js | CSS + JS polyfill | MIT | HTML → PDF via print | Low-medium (must serve over http, not file://) | Long flowing documents needing real auto-pagination/TOC/running headers | ~500KB JS; mixed-orientation named pages currently buggy (documented, upstream issue) | **No — additional find** | [paged-js](intern-pdf-html-lab/paged-js) |
+| Jinja2 | Python (templating engine, not a renderer) | BSD-3-Clause | HTML (feeds into any PDF renderer) | Low | Generating a report's HTML from data — inheritance, macros, includes, custom filters — instead of hand-writing it per document; FastAPI's own default templating engine | Produces HTML only, no layout/PDF opinion of its own; needs a CSS approach + renderer (paired here with WeasyPrint) | **No — additional find** | [jinja2](intern-pdf-html-lab/jinja2) |
 
 ## JS PDF / HTML-to-PDF
 

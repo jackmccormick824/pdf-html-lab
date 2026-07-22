@@ -34,6 +34,13 @@ specifically when you need real automatic re-pagination of long flowing
 content in-browser and are fine with a JS polyfill (and its one known bug
 around mixed-orientation named pages, documented in that folder).
 
+None of the above answers where the HTML itself comes from when it's
+generated per request rather than hand-written once. **[Jinja2](intern-pdf-html-lab/jinja2)**
+is that layer — template inheritance, macros, and loops over your data
+model produce the HTML that Playwright/Puppeteer/WeasyPrint then print. It's
+also FastAPI's own default templating engine, so it's the natural fit if
+the backend is already FastAPI.
+
 ## (c) PDF built in code (no browser, no HTML)
 
 **Top pick: [ReportLab](intern-pdf-html-lab/reportlab)** (Python) for anything
@@ -62,8 +69,12 @@ Frontend report preview: **[Tailwind](intern-pdf-html-lab/tailwind)**, reusing
 the app's existing design tokens. PDF export of that same page:
 **[Playwright](intern-pdf-html-lab/playwright-pdf)**, called from the FastAPI
 backend, printing the already-styled page — one rendering pass, one source of
-truth for how the report looks on screen and on paper. If a report needs to
-be generated without ever touching a browser (background jobs, high volume,
-tight latency budgets), **[ReportLab](intern-pdf-html-lab/reportlab)** on the
-Python side or **[pdf-lib](intern-pdf-html-lab/pdf-lib)**/**[PDFKit](intern-pdf-html-lab/pdfkit-node)**
+truth for how the report looks on screen and on paper. For reports that are
+rendered server-side instead (emailed statements, background jobs with no
+React page to screenshot), **[Jinja2](intern-pdf-html-lab/jinja2)** generates
+the HTML from the data model and **[WeasyPrint](intern-pdf-html-lab/weasyprint)**
+prints it — same split of concerns, just without a browser round-trip. If a
+report needs to be generated without ever touching HTML at all (background
+jobs, high volume, tight latency budgets), **[ReportLab](intern-pdf-html-lab/reportlab)**
+on the Python side or **[pdf-lib](intern-pdf-html-lab/pdf-lib)**/**[PDFKit](intern-pdf-html-lab/pdfkit-node)**
 on the Node side, depending on which language owns that service.

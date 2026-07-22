@@ -1,0 +1,31 @@
+{% extends "base.html.j2" %}
+{% from "macros.html.j2" import invoice_table, callout %}
+
+{% block title %}Overdue Invoice Digest — {{ period }}{% endblock %}
+
+{% block content %}
+<section class="summary">
+  <h1>Overdue Invoice Digest</h1>
+  <p class="subtitle">{{ period }} &middot; {{ customers | length }} accounts with open balances</p>
+
+  {{ callout('info', 'Portfolio total outstanding', total_outstanding | usd ~ ' across ' ~ total_invoice_count ~ ' invoices, ' ~ severely_overdue_count ~ ' account' ~ ('s' if severely_overdue_count != 1 else '') ~ ' over 60 days past due.') }}
+
+  <div class="chart-wrap">
+    {{ chart_svg | safe }}
+  </div>
+</section>
+
+{% for customer in customers %}
+<section class="customer-chapter" data-title="{{ customer.name }}">
+  {% include "partials/_customer_header.html.j2" %}
+
+  {% if customer.days_overdue_max > 60 %}
+    {{ callout('warning', 'Collections escalation', customer.name ~ ' has invoices over 60 days past due — flag for the collections team before next billing cycle.') }}
+  {% elif customer.days_overdue_max > 0 %}
+    {{ callout('info', 'Payment reminder due', customer.name ~ ' has invoices past due but under 60 days — a standard reminder is scheduled.') }}
+  {% endif %}
+
+  {{ invoice_table(customer.invoices) }}
+</section>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Report{% endblock %}</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="cover-strip">
+    <span class="brand">Meridian Collections</span>
+    <span class="generated">Generated {{ generated_on | dateformat }}</span>
+  </header>
+
+  {% block content %}{% endblock %}
+
+</body>
+</html>

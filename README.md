@@ -23,6 +23,7 @@ Beyond that list, this lab also researched and built:
 - **[@react-pdf/renderer](intern-pdf-html-lab/react-pdf)** — build PDFs as React components, the natural fit for a React-based stack
 - **[Pandoc](intern-pdf-html-lab/pandoc)** — Markdown-to-PDF via pluggable backends (used here with Typst)
 - **[Typst](intern-pdf-html-lab/typst)** — a modern, lightweight LaTeX alternative with native math typesetting
+- **[Jinja2](intern-pdf-html-lab/jinja2)** — the templating layer the starter list's "component/template approaches" bullet was pointing at; FastAPI's own default templating engine, and the one example that shows generating a report's HTML from a loop over data instead of writing it by hand
 
 ## Start here
 
@@ -47,6 +48,7 @@ library, because the bug (and fix) generalizes:
 - [`reportlab`](intern-pdf-html-lab/reportlab) — `ParagraphStyle` defaults `leading` to a flat 12pt regardless of `fontSize`, causing large headings to overlap the text below them.
 - [`typst`](intern-pdf-html-lab/typst) — a chart grid split mid-row across a page boundary; fixed with Typst's equivalent of `break-inside: avoid`.
 - [`fpdf2`](intern-pdf-html-lab/fpdf2) — an early draft claimed CJK/emoji glyph support the embedded font didn't actually have; fpdf2's build-time warning caught it before it shipped as silent tofu boxes.
+- [`jinja2`](intern-pdf-html-lab/jinja2) — the first render of the rendered HTML was unreadable in a browser with a dark OS theme: no explicit `background`/`color-scheme` meant the browser's UA dark-mode default painted the page black while the CSS's own dark ink color stayed dark-on-dark. Fixed with an explicit `background: #fff; color-scheme: light` — a real gotcha for any hand-rolled HTML report, not just this one.
 
 ## Environment notes / system dependencies
 

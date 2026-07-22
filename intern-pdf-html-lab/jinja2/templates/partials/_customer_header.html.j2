@@ -1,0 +1,7 @@
+{# Included once per customer from report.html.j2 — a self-contained partial,
+   parameterized entirely by the `customer` loop variable already in scope
+   (Jinja2's {% include %} shares the caller's context by default). #}
+<div class="customer-heading">
+  <h2>{{ customer.name }}</h2>
+  <span class="account-id">Account {{ customer.account_id }}</span>
+</div>
