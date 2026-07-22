@@ -1,0 +1,64 @@
+@font-face {
+  font-family: 'Karla';
+  src: url('fonts/Karla.ttf');
+  font-weight: 200 800;
+}
+@font-face {
+  font-family: 'Crimson Pro';
+  src: url('fonts/CrimsonPro.ttf');
+  font-weight: 200 800;
+}
+
+:root { --accent: #0e5c4a; --accent-light: #e6f2ee; --ink: #1b1b1b; --muted: #666; }
+
+body { font-family: 'Crimson Pro', serif; font-size: 11pt; color: var(--ink); margin: 0; }
+h1, h2, .brand { font-family: 'Karla', sans-serif; }
+p { line-height: 1.5; orphans: 3; widows: 3; }
+table { width: 100%; border-collapse: collapse; font-family: 'Karla', sans-serif; font-size: 9.5pt; margin: 10px 0; }
+th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid #ddd; }
+thead th { background: var(--accent-light); color: var(--accent); }
+
+.callout { border-left: 4px solid var(--accent); background: var(--accent-light); padding: 10px 14px; border-radius: 4px; margin: 12px 0; break-inside: avoid; }
+.callout.warn { border-left-color: #b45309; background: #fdf1e3; }
+
+.chart { width: 100%; height: auto; margin: 8px 0; }
+
+.glossary-columns { column-count: 2; column-gap: 28px; }
+.glossary-columns p { break-inside: avoid; margin: 0 0 12px; font-size: 10pt; }
+
+/* ---- Cover ---- */
+.cover { page: cover; break-after: page; text-align: center; margin-top: 35%; }
+.cover .brand { text-transform: uppercase; letter-spacing: 0.14em; font-size: 9pt; color: var(--accent); font-weight: 700; }
+.cover h1 { font-size: 26pt; margin: 10px 0 4px; }
+.cover .subtitle { color: var(--muted); font-size: 12pt; }
+
+/* ---- TOC, with real target-counter page references ---- */
+.toc { page: toc; break-after: page; }
+.toc h2 { border-bottom: 2px solid var(--accent); padding-bottom: 4px; }
+.toc ul { list-style: none; padding: 0; font-family: 'Karla', sans-serif; }
+.toc li { display: flex; align-items: baseline; margin: 8px 0; }
+.toc a { color: var(--ink); text-decoration: none; }
+.toc .dots { flex: 1; border-bottom: 1px dotted #999; margin: 0 6px; }
+.toc .pagenum::after { content: target-counter(attr(href), page); font-weight: 700; color: var(--accent); }
+.toc-note { font-size: 8.5pt; color: var(--muted); margin-top: 30px; }
+
+.chapter { break-before: page; string-set: chaptertitle attr(data-title); }
+.chapter h2 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 4px; }
+
+/* ---- Native CSS Paged Media: running headers + "Page X of Y" ----
+   WeasyPrint implements @page margin boxes, string-set/string(), and
+   counter(pages) natively — no JS polyfill, unlike browsers (see
+   ../paged-js and ../custom-print-css for what that gap looks like). */
+@page {
+  size: A4;
+  margin: 26mm 20mm 20mm 20mm;
+  @top-right { content: string(chaptertitle); font-family: 'Karla', sans-serif; font-size: 8pt; color: var(--muted); }
+  @bottom-center { content: "Page " counter(page) " of " counter(pages); font-family: 'Karla', sans-serif; font-size: 8pt; color: var(--muted); }
+}
+@page cover {
+  @top-right { content: none; }
+  @bottom-center { content: none; }
+}
+@page toc {
+  @top-right { content: "Contents"; }
+}
