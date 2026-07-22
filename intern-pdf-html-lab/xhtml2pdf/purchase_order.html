@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<style>
+  /* xhtml2pdf understands CSS 2.1 plus a handful of CSS3 properties —
+     no flexbox, no CSS grid, and only partial border-radius/box-shadow
+     support. Layout below deliberately uses tables/floats, the way you
+     had to lay out HTML email before flexbox existed. */
+  @page {
+    size: A4;
+    margin: 2cm 1.8cm 2.4cm 1.8cm;
+    @frame footer_frame {
+      -pdf-frame-content: footerContent;
+      bottom: 1cm; left: 1.8cm; right: 1.8cm; height: 1.2cm;
+    }
+  }
+  body { font-family: Helvetica, sans-serif; font-size: 10pt; color: #1a1a1a; }
+  h1 { font-size: 18pt; margin-bottom: 2px; color: #1a3d5c; }
+  .subtitle { color: #666; font-size: 10pt; margin-top: 0; }
+
+  .header-table { width: 100%; border-bottom: 3px solid #1a3d5c; padding-bottom: 10px; margin-bottom: 14px; }
+  .header-table td { vertical-align: top; }
+  .logo-cell { width: 54px; }
+  .logo-box { width: 44px; height: 44px; background-color: #1a3d5c; color: white;
+              text-align: center; font-size: 14pt; font-weight: bold; padding-top: 12px; }
+  .meta-cell { text-align: right; font-size: 9pt; color: #555; }
+
+  table.items { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  table.items th { background-color: #eaf0f6; color: #1a3d5c; text-align: left; padding: 6px 8px; font-size: 9.5pt; border-bottom: 1px solid #ccc; }
+  table.items th.num { text-align: right; }
+  table.items td { padding: 6px 8px; font-size: 9.5pt; border-bottom: 1px solid #eee; }
+  table.items td.num { text-align: right; }
+
+  .totals-table { width: 260px; margin-left: auto; margin-top: 10px; }
+  .totals-table td { padding: 4px 8px; font-size: 9.5pt; }
+  .totals-table .grand td { font-weight: bold; border-top: 1px solid #999; font-size: 10.5pt; color: #1a3d5c; }
+
+  .callout { background-color: #eaf0f6; padding: 10px 12px; margin-top: 16px;
+             border-left: 4px solid #1a3d5c; font-size: 9.5pt; }
+
+  #footerContent { font-size: 8pt; color: #888; text-align: center; }
+</style>
+</head>
+<body>
+
+  <table class="header-table">
+    <tr>
+      <td class="logo-cell"><div class="logo-box">NA</div></td>
+      <td>
+        <h1>Purchase Order</h1>
+        <p class="subtitle">Nimbus Analytics — Procurement</p>
+      </td>
+      <td class="meta-cell">
+        PO Number: <strong>PO-2026-0417</strong><br/>
+        Issue date: July 22, 2026<br/>
+        Terms: Net 30
+      </td>
+    </tr>
+  </table>
+
+  <table style="width:100%; margin-bottom: 14px;">
+    <tr>
+      <td style="width:50%; vertical-align:top;">
+        <strong>Vendor</strong><br/>
+        Summit Office Supply Co.<br/>
+        442 Industrial Pkwy<br/>
+        Austin, TX 78744
+      </td>
+      <td style="width:50%; vertical-align:top;">
+        <strong>Ship to</strong><br/>
+        Nimbus Analytics — HQ<br/>
+        1100 Congress Ave, Suite 400<br/>
+        Austin, TX 78701
+      </td>
+    </tr>
+  </table>
+
+  <table class="items">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>SKU</th>
+        <th class="num">Qty</th>
+        <th class="num">Unit&nbsp;Price</th>
+        <th class="num">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Standing desk, 60in, walnut</td><td>SD-60-WAL</td><td class="num">14</td><td class="num">$389.00</td><td class="num">$5,446.00</td></tr>
+      <tr><td>Ergonomic task chair</td><td>ETC-BLK</td><td class="num">18</td><td class="num">$245.00</td><td class="num">$4,410.00</td></tr>
+      <tr><td>27in monitor, USB-C</td><td>MON-27C</td><td class="num">22</td><td class="num">$310.00</td><td class="num">$6,820.00</td></tr>
+      <tr><td>Monitor arm, dual</td><td>MA-DUAL</td><td class="num">11</td><td class="num">$78.00</td><td class="num">$858.00</td></tr>
+      <tr><td>Conference room display, 75in</td><td>CRD-75</td><td class="num">2</td><td class="num">$1,450.00</td><td class="num">$2,900.00</td></tr>
+    </tbody>
+  </table>
+
+  <table class="totals-table">
+    <tr><td>Subtotal</td><td class="num" style="text-align:right;">$20,434.00</td></tr>
+    <tr><td>Shipping</td><td class="num" style="text-align:right;">$540.00</td></tr>
+    <tr><td>Tax (8.25%)</td><td class="num" style="text-align:right;">$1,685.30</td></tr>
+    <tr class="grand"><td>Total</td><td class="num" style="text-align:right;">$22,659.30</td></tr>
+  </table>
+
+  <div class="callout">
+    <strong>Delivery note:</strong> Please coordinate delivery with Facilities
+    (facilities@nimbusanalytics.example) at least 48 hours in advance — the
+    freight elevator requires a reservation for anything on a pallet.
+  </div>
+
+  <div id="footerContent">
+    Nimbus Analytics · Procurement · Confidential &nbsp;|&nbsp; Page <pdf:pagenumber /> of <pdf:pagecount />
+  </div>
+
+</body>
+</html>
