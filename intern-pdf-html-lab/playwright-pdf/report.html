@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Regional Sales Performance — FY2026 H1</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<style>
+  @font-face {
+    font-family: 'Space Grotesk';
+    src: url('./fonts/SpaceGrotesk-Bold.ttf') format('truetype');
+    font-weight: 300 700;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: 'Space Grotesk', -apple-system, sans-serif; color: #14171f; margin: 0; }
+  h1 { font-size: 1.7rem; margin: 0 0 2px; }
+  h2 { font-size: 1.05rem; margin-top: 1.6rem; border-bottom: 2px solid #0f766e; padding-bottom: 4px; }
+  .subtitle { color: #666; margin: 0; font-size: 0.95rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 10px; }
+  th, td { text-align: right; padding: 6px 10px; border-bottom: 1px solid #eee; }
+  th:first-child, td:first-child { text-align: left; }
+  thead th { background: #ecf6f4; }
+  tbody tr:nth-child(even) { background: #fafcfc; }
+  .callout { border-left: 4px solid #0f766e; background: #ecf6f4; padding: 0.7rem 1rem; border-radius: 4px; margin: 0.9rem 0; break-inside: avoid; font-size: 0.9rem; }
+  .callout.warn { border-left-color: #b45309; background: #fdf3e7; }
+  .grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; align-items: start; }
+  section { break-inside: avoid; }
+</style>
+</head>
+<body>
+
+  <h1>Regional Sales Performance</h1>
+  <p class="subtitle">FY2026 H1 · Nimbus Analytics Revenue Operations · Custom font: self-hosted Space Grotesk (variable, embedded via @font-face — no CDN)</p>
+
+  <section>
+    <h2>Monthly Revenue by Region</h2>
+    <div class="grid">
+      <div id="revChart" style="width:100%; height:280px;"></div>
+      <div class="callout">
+        <strong>EMEA overtook APAC in May.</strong> Driven by the enterprise
+        renewal wave closing early — six-figure accounts that were forecast
+        for June closed 3-4 weeks ahead of schedule.
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Full Regional Breakdown (all 6 months)</h2>
+    <table>
+      <thead>
+        <tr><th>Region</th><th>Jan</th><th>Feb</th><th>Mar</th><th>Apr</th><th>May</th><th>Jun</th><th>H1 Total</th><th>YoY</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>North America</td><td>$412K</td><td>$430K</td><td>$448K</td><td>$455K</td><td>$470K</td><td>$482K</td><td>$2.70M</td><td>+14%</td></tr>
+        <tr><td>EMEA</td><td>$268K</td><td>$281K</td><td>$295K</td><td>$310K</td><td>$401K</td><td>$392K</td><td>$1.95M</td><td>+27%</td></tr>
+        <tr><td>APAC</td><td>$301K</td><td>$305K</td><td>$298K</td><td>$312K</td><td>$318K</td><td>$330K</td><td>$1.86M</td><td>+6%</td></tr>
+        <tr><td>LATAM</td><td>$94K</td><td>$98K</td><td>$103K</td><td>$110K</td><td>$118K</td><td>$126K</td><td>$0.65M</td><td>+31%</td></tr>
+      </tbody>
+    </table>
+    <div class="callout warn">
+      <strong>APAC growth is lagging the other regions.</strong> +6% YoY vs.
+      +14-31% elsewhere. Regional VP has flagged pricing localization as the
+      likely driver — a proposal is due before the Q3 planning offsite.
+    </div>
+  </section>
+
+  <script>
+    Plotly.newPlot('revChart', [
+      { x: ['Jan','Feb','Mar','Apr','May','Jun'], y: [412,430,448,455,470,482], name: 'North America', type: 'scatter', mode: 'lines+markers', line: { color: '#0f766e' } },
+      { x: ['Jan','Feb','Mar','Apr','May','Jun'], y: [268,281,295,310,401,392], name: 'EMEA', type: 'scatter', mode: 'lines+markers', line: { color: '#b45309' } },
+      { x: ['Jan','Feb','Mar','Apr','May','Jun'], y: [301,305,298,312,318,330], name: 'APAC', type: 'scatter', mode: 'lines+markers', line: { color: '#7c3aed' } },
+      { x: ['Jan','Feb','Mar','Apr','May','Jun'], y: [94,98,103,110,118,126], name: 'LATAM', type: 'scatter', mode: 'lines+markers', line: { color: '#be185d' } },
+    ], {
+      margin: { t: 10, l: 40, r: 10, b: 30 },
+      font: { family: 'Space Grotesk, sans-serif', size: 11 },
+      yaxis: { title: 'Revenue ($K)' },
+      legend: { orientation: 'h', y: -0.2 },
+    }, { staticPlot: true, responsive: false });
+    document.body.setAttribute('data-chart-ready', 'true');
+  </script>
+</body>
+</html>
