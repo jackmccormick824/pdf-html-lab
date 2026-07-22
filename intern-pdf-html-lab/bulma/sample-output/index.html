@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Product Launch Readiness Report (Bulma)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="./vendor/bulma.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+  body { font-family: 'Inter', sans-serif; }
+  h1, h2, .title { font-family: 'Fraunces', serif; }
+  @media print {
+    .no-print { display: none !important; }
+    @page { margin: 16mm; }
+    .box, tr { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero is-link no-print">
+  <div class="hero-body py-3">
+    <div class="is-flex is-justify-content-space-between is-align-items-center">
+      <p class="subtitle is-6 has-text-white mb-0">Bulma 1.0 showcase — flexbox-based, native dark mode</p>
+      <button class="button is-small" id="theme-toggle">Toggle dark / light</button>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+
+    <div class="is-flex is-justify-content-space-between is-align-items-flex-end mb-5" style="border-bottom: 4px solid #485fc7; padding-bottom: 1.25rem;">
+      <div class="is-flex is-align-items-center">
+        <div class="mr-4" style="width:56px;height:56px;border-radius:12px;background:#485fc7;color:white;display:flex;align-items:center;justify-content:center;font-weight:700;">PL</div>
+        <div>
+          <h1 class="title mb-0">Product Launch Readiness</h1>
+          <p class="subtitle is-6 has-text-grey">"Nova" Release — Q2 2026</p>
+        </div>
+      </div>
+      <div class="has-text-right is-size-7 has-text-grey">
+        <p>Prepared for: Launch Steering Committee</p>
+        <p>Generated: July 22, 2026</p>
+      </div>
+    </div>
+
+    <div class="columns is-multiline mb-5">
+      <div class="column is-3">
+        <div class="box has-text-centered">
+          <p class="is-size-7 has-text-grey is-uppercase">Readiness score</p>
+          <p class="title is-3 has-text-link">87%</p>
+        </div>
+      </div>
+      <div class="column is-3">
+        <div class="box has-text-centered">
+          <p class="is-size-7 has-text-grey is-uppercase">Blocking bugs</p>
+          <p class="title is-3 has-text-danger">3</p>
+        </div>
+      </div>
+      <div class="column is-3">
+        <div class="box has-text-centered">
+          <p class="is-size-7 has-text-grey is-uppercase">Docs complete</p>
+          <p class="title is-3 has-text-link">94%</p>
+        </div>
+      </div>
+      <div class="column is-3">
+        <div class="box has-text-centered">
+          <p class="is-size-7 has-text-grey is-uppercase">Days to launch</p>
+          <p class="title is-3 has-text-link">11</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="box mb-5">
+      <h2 class="title is-5">Readiness Trend (last 6 weeks)</h2>
+      <canvas id="readinessChart" height="80"></canvas>
+    </div>
+
+    <div class="box mb-5">
+      <h2 class="title is-5">Workstream Status</h2>
+      <div class="table-container">
+        <table class="table is-fullwidth is-striped is-hoverable">
+          <thead>
+            <tr><th>Workstream</th><th>Owner</th><th>Progress</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Core platform</td><td>J. Ortiz</td><td>96%</td><td><span class="tag is-success">Ready</span></td></tr>
+            <tr><td>Billing integration</td><td>S. Kim</td><td>78%</td><td><span class="tag is-warning">At risk</span></td></tr>
+            <tr><td>Mobile app</td><td>A. Novak</td><td>91%</td><td><span class="tag is-success">Ready</span></td></tr>
+            <tr><td>Localization (EMEA)</td><td>L. Dubois</td><td>62%</td><td><span class="tag is-danger">Blocked</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="notification is-info is-light">
+      <strong>Core platform ahead of schedule.</strong> Load testing completed two days early with no P0/P1 regressions found.
+    </div>
+    <div class="notification is-danger is-light">
+      <strong>Localization is the critical path.</strong> EMEA string freeze slipped 4 days; translation vendor needs final strings by July 25 to hold the launch date.
+    </div>
+
+    <footer class="is-flex is-justify-content-space-between is-size-7 has-text-grey pt-4 mt-6" style="border-top: 1px solid #e5e5e5;">
+      <span>Product Launch Readiness · Confidential</span>
+      <span>Fraunces + Inter custom typefaces</span>
+    </footer>
+
+  </div>
+</section>
+
+<script>
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const html = document.documentElement;
+    html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+  new Chart(document.getElementById('readinessChart'), {
+    type: 'line',
+    data: {
+      labels: ['Wk1','Wk2','Wk3','Wk4','Wk5','Wk6'],
+      datasets: [{
+        label: 'Readiness %',
+        data: [58, 64, 70, 76, 81, 87],
+        borderColor: '#485fc7',
+        backgroundColor: 'rgba(72,95,199,0.15)',
+        fill: true,
+        tension: 0.3,
+      }]
+    },
+    options: { responsive: true, plugins: { legend: { display: false } } }
+  });
+</script>
+</body>
+</html>
