@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>jsPDF — client-side invoice generator</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="./vendor/jspdf.umd.min.js"></script>
+<script src="./vendor/jspdf.plugin.autotable.min.js"></script>
+<style>
+  body { font-family: -apple-system, sans-serif; max-width: 640px; margin: 3rem auto; color: #222; }
+  button { background: #1f6feb; color: white; border: 0; padding: 10px 18px; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+  button:hover { background: #1a5fc7; }
+  #status { margin-top: 1rem; font-size: 0.9rem; color: #555; }
+  canvas#chartSource { display: none; }
+</style>
+</head>
+<body>
+  <h1>jsPDF — client-side invoice generator</h1>
+  <p>
+    Everything below runs <strong>entirely in this browser tab</strong> —
+    no server, no headless-browser step. Click the button to build a
+    multi-page invoice PDF (branded header, line-item table via
+    jspdf-autotable, a rasterized Chart.js chart, and a payment-terms
+    callout) and trigger a download.
+  </p>
+  <button id="generate">Generate invoice PDF</button>
+  <p id="status"></p>
+
+  <canvas id="chartSource" width="500" height="220"></canvas>
+
+  <script>
+    const lineItems = [
+      ['Design System Consulting', '12', '$185.00', '$2,220.00'],
+      ['Frontend Implementation (Sprint 1)', '40', '$140.00', '$5,600.00'],
+      ['Frontend Implementation (Sprint 2)', '38', '$140.00', '$5,320.00'],
+      ['PDF/Report Tooling Research', '16', '$140.00', '$2,240.00'],
+      ['QA & Cross-browser Testing', '10', '$110.00', '$1,100.00'],
+      ['Project Management', '14', '$120.00', '$1,680.00'],
+      ['Accessibility Audit', '8', '$150.00', '$1,200.00'],
+      ['Documentation', '6', '$110.00', '$660.00'],
+      ['Client Workshops (x3)', '9', '$160.00', '$1,440.00'],
+      ['Staging Environment Setup', '5', '$140.00', '$700.00'],
+      ['Performance Optimization Pass', '11', '$150.00', '$1,650.00'],
+      ['Contingency / Revisions', '7', '$140.00', '$980.00'],
+      ['API Integration — Billing Webhooks', '18', '$150.00', '$2,700.00'],
+      ['API Integration — Auth Provider', '14', '$150.00', '$2,100.00'],
+      ['Component Library Audit', '9', '$130.00', '$1,170.00'],
+      ['Design Review Sessions (x4)', '6', '$160.00', '$960.00'],
+      ['Load Testing & Capacity Planning', '13', '$150.00', '$1,950.00'],
+      ['Analytics Instrumentation', '10', '$130.00', '$1,300.00'],
+      ['Localization Prep (EMEA)', '12', '$120.00', '$1,440.00'],
+      ['Security Review Follow-ups', '8', '$150.00', '$1,200.00'],
+      ['Sprint 3 Implementation', '36', '$140.00', '$5,040.00'],
+      ['Sprint 4 Implementation', '34', '$140.00', '$4,760.00'],
+      ['Release Coordination', '7', '$130.00', '$910.00'],
+      ['Post-launch Bug Fixes (Week 1)', '9', '$140.00', '$1,260.00'],
+      ['Knowledge Transfer Session', '4', '$150.00', '$600.00'],
+    ];
+
+    function buildChartImage() {
+      return new Promise((resolve) => {
+        const ctx = document.getElementById('chartSource');
+        const chart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Sprint 1', 'Sprint 2', 'Research', 'QA', 'PM', 'Other'],
+            datasets: [{
+              data: [5600, 5320, 2240, 1100, 1680, 3980],
+              backgroundColor: '#1f6feb',
+            }]
+          },
+          options: {
+            responsive: false,
+            animation: false,
+            plugins: { legend: { display: false }, title: { display: true, text: 'Spend by workstream ($)' } }
+          }
+        });
+        // Chart.js with animation:false still needs a tick to paint; a
+        // short timeout is more reliable than requestAnimationFrame here
+        // since rAF can stall on backgrounded/inactive tabs.
+        setTimeout(() => {
+          resolve(ctx.toDataURL('image/png'));
+          chart.destroy();
+        }, 80);
+      });
+    }
+
+    document.getElementById('generate').addEventListener('click', async () => {
+      const status = document.getElementById('status');
+      status.textContent = 'Rendering chart…';
+      const chartImg = await buildChartImage();
+
+      status.textContent = 'Building PDF…';
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+      const pageWidth = doc.internal.pageSize.getWidth();
+
+      const drawHeader = () => {
+        doc.setFillColor(31, 111, 235);
+        doc.rect(0, 0, pageWidth, 60, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Nimbus Analytics', 40, 38);
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        doc.text('INVOICE #NA-2026-0714', pageWidth - 40, 38, { align: 'right' });
+      };
+      drawHeader();
+
+      doc.setTextColor(30, 30, 30);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Bill to: Acme Analytics, Attn: Accounts Payable', 40, 90);
+      doc.text('Invoice date: July 22, 2026    Due: August 21, 2026', 40, 104);
+
+      doc.autoTable({
+        head: [['Line item', 'Hours', 'Rate', 'Amount']],
+        body: lineItems,
+        startY: 125,
+        styles: { fontSize: 9, cellPadding: 6 },
+        headStyles: { fillColor: [31, 111, 235] },
+        alternateRowStyles: { fillColor: [245, 247, 255] },
+        columnStyles: { 1: { halign: 'right' }, 2: { halign: 'right' }, 3: { halign: 'right' } },
+        margin: { top: 70 },
+        didDrawPage: (data) => {
+          if (data.pageNumber > 1) drawHeader();
+        },
+      });
+
+      let finalY = doc.lastAutoTable.finalY + 20;
+      if (finalY > 700) { doc.addPage(); drawHeader(); finalY = 90; }
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.text('Total due: $23,790.00', 40, finalY);
+      finalY += 20;
+
+      const imgProps = doc.getImageProperties(chartImg);
+      const imgWidth = 260;
+      const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+      if (finalY + imgHeight > 760) { doc.addPage(); drawHeader(); finalY = 90; }
+      doc.addImage(chartImg, 'PNG', 40, finalY, imgWidth, imgHeight);
+
+      // Callout box next to / below the chart
+      const calloutX = 320, calloutY = finalY, calloutW = pageWidth - 40 - calloutX, calloutH = imgHeight;
+      doc.setFillColor(245, 247, 255);
+      doc.setDrawColor(31, 111, 235);
+      doc.roundedRect(calloutX, calloutY, calloutW, calloutH, 4, 4, 'FD');
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(20, 20, 20);
+      doc.text('Payment terms', calloutX + 12, calloutY + 20);
+      doc.setFont('helvetica', 'normal');
+      doc.text(
+        doc.splitTextToSize('Net 30. A 1.5% monthly late fee applies to overdue balances. Pay by ACH to avoid card processing fees.', calloutW - 24),
+        calloutX + 12,
+        calloutY + 38
+      );
+
+      // Page numbers, two-pass so the total count is known
+      const totalPages = doc.internal.getNumberOfPages();
+      for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setTextColor(140, 140, 140);
+        doc.text(`Page ${i} of ${totalPages}`, pageWidth - 40, 820, { align: 'right' });
+      }
+
+      doc.save('nimbus-invoice-NA-2026-0714.pdf');
+      status.textContent = `Done — ${totalPages} page(s) generated client-side.`;
+    });
+  </script>
+</body>
+</html>
