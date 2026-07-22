@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Weekly Engineering Status — Platform Team (Pico.css)</title>
+<link rel="stylesheet" href="./vendor/pico.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+  .callout { border-left: 4px solid var(--pico-primary); background: var(--pico-card-sectioning-background-color); padding: 1rem; border-radius: var(--pico-border-radius); margin-block: 1rem; }
+  .callout.warn { border-left-color: #c0392b; }
+  @media print {
+    .no-print { display: none !important; }
+    @page { margin: 16mm; }
+    article, tr { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<header class="container no-print">
+  <nav>
+    <ul><li><strong>Pico.css showcase</strong> — classless semantic HTML</li></ul>
+    <ul><li><button id="theme-toggle" class="secondary outline">Toggle dark / light</button></li></ul>
+  </nav>
+</header>
+
+<main class="container">
+  <header>
+    <hgroup>
+      <h1>Weekly Engineering Status</h1>
+      <p>Platform Team · Week of July 20, 2026</p>
+    </hgroup>
+  </header>
+
+  <section>
+    <h2>Summary</h2>
+    <p>
+      Shipped the new billing webhook retry system and completed the Postgres 16
+      upgrade in staging. On track for the Q3 infra freeze. One incident this
+      week (see below) with a same-day fix and postmortem scheduled.
+    </p>
+  </section>
+
+  <section>
+    <h2>Sprint Velocity</h2>
+    <figure>
+      <canvas id="velocityChart" height="90"></canvas>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Workstreams</h2>
+    <figure>
+      <table>
+        <thead>
+          <tr><th scope="col">Workstream</th><th scope="col">Owner</th><th scope="col">Status</th><th scope="col">ETA</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Billing webhook retries</td><td>N. Osei</td><td>✅ Shipped</td><td>—</td></tr>
+          <tr><td>Postgres 16 upgrade</td><td>T. Brandt</td><td>🟡 Staging</td><td>Jul 28</td></tr>
+          <tr><td>Rate limiter v2</td><td>H. Suzuki</td><td>🔵 In review</td><td>Jul 25</td></tr>
+          <tr><td>Observability dashboards</td><td>P. Adeyemi</td><td>⚪️ Not started</td><td>Aug 4</td></tr>
+        </tbody>
+      </table>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Notes</h2>
+    <article class="callout">
+      <strong>Postgres upgrade is derisked.</strong> Staging has run for 72 hours
+      with production-shaped traffic replayed against it, no query plan regressions found.
+    </article>
+    <article class="callout warn">
+      <strong>Incident: webhook queue backup, Tuesday 14:02–14:47 UTC.</strong>
+      Root cause was a missing index after Monday's migration; fixed same-day.
+      Postmortem scheduled for Thursday standup.
+    </article>
+  </section>
+
+  <footer>
+    <small>Platform Team weekly status · Internal · Pico.css v2 (classless framework, MIT license)</small>
+  </footer>
+</main>
+
+<script>
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const html = document.documentElement;
+    html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+  new Chart(document.getElementById('velocityChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Sprint 41','Sprint 42','Sprint 43','Sprint 44','Sprint 45'],
+      datasets: [{ label: 'Points completed', data: [34, 29, 41, 38, 45], backgroundColor: '#0d6efd' }]
+    },
+    options: { responsive: true, plugins: { legend: { display: false } } }
+  });
+</script>
+</body>
+</html>
