@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Customer Onboarding Health Report (Water.css)</title>
+<link rel="stylesheet" href="./vendor/water.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+  .callout { border-left: 4px solid #1a73e8; padding: 0.75rem 1rem; margin: 1rem 0; border-radius: 4px; }
+  .callout.warn { border-left-color: #c0392b; }
+  @media print {
+    .no-print { display: none !important; }
+    @page { margin: 16mm; }
+    tr, .callout { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<p class="no-print"><em>Water.css showcase — theme follows your OS/browser color scheme automatically, no toggle button or JS needed. Try switching your system appearance to see it change.</em></p>
+
+<header>
+  <h1>Customer Onboarding Health Report</h1>
+  <p>Customer Success · July 2026 Cohort</p>
+</header>
+
+<section>
+  <h2>Summary</h2>
+  <p>
+    The July cohort of 84 new accounts is tracking ahead of target for
+    time-to-first-value (5.2 days vs. 7-day goal). Two accounts are flagged
+    at risk of stalling in onboarding and are covered in the notes below.
+  </p>
+</section>
+
+<section>
+  <h2>Time to First Value</h2>
+  <figure>
+    <canvas id="ttfvChart" height="90"></canvas>
+  </figure>
+</section>
+
+<section>
+  <h2>Cohort Detail</h2>
+  <table>
+    <thead>
+      <tr><th>Account</th><th>Plan</th><th>Days to Activation</th><th>Health</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Marlowe Studio</td><td>Team</td><td>3</td><td>🟢 Healthy</td></tr>
+      <tr><td>Brightfield Logistics</td><td>Enterprise</td><td>6</td><td>🟢 Healthy</td></tr>
+      <tr><td>Hearthstone Realty</td><td>Team</td><td>14</td><td>🟠 At risk</td></tr>
+      <tr><td>Vantage Point Media</td><td>Team</td><td>4</td><td>🟢 Healthy</td></tr>
+      <tr><td>Cobalt & Finch</td><td>Starter</td><td>21</td><td>🔴 Stalled</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Notes</h2>
+  <div class="callout">
+    <strong>Enterprise onboarding is outperforming target.</strong> Dedicated CSM
+    onboarding calls in week 1 correlate strongly with faster activation —
+    consider extending that playbook to Team-tier accounts.
+  </div>
+  <div class="callout warn">
+    <strong>Cobalt &amp; Finch is stalled at day 21.</strong> No login in 9 days;
+    outreach attempted twice with no response. Recommend an executive-level
+    check-in before the account is flagged for churn risk.
+  </div>
+</section>
+
+<footer>
+  <p><small>Customer Success · Internal · Water.css v2 (classless, auto dark/light via <code>prefers-color-scheme</code>)</small></p>
+</footer>
+
+<script>
+  new Chart(document.getElementById('ttfvChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+      datasets: [{ label: 'Avg days to activation', data: [6.1, 5.4, 4.8, 5.2], backgroundColor: '#1a73e8' }]
+    },
+    options: { responsive: true, plugins: { legend: { display: false } } }
+  });
+</script>
+</body>
+</html>
