@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Annual Infrastructure Report 2026 (Hand-rolled Print CSS)</title>
+<link rel="stylesheet" href="./print.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<p class="screen-note no-print">
+  This example uses <strong>zero frameworks</strong> — every rule in
+  <code>print.css</code> is raw CSS Paged Media (<code>@page</code>,
+  <code>page-break-*</code>, <code>break-inside</code>, CSS counters).
+  Resize/print-preview this page (⌘P) to see it paginate into three
+  fixed-size A4 pages with running headers/footers and page numbers.
+  On screen (without printing) each "page" below is just a bordered div
+  so you can see the boundaries without opening the print dialog.
+</p>
+
+<div class="page" id="page1">
+  <div class="page-header">Annual Infrastructure Report 2026 <span class="dim">— Cover</span></div>
+  <div class="cover">
+    <h1>Annual Infrastructure Report</h1>
+    <p class="subtitle">Platform Engineering · Fiscal Year 2026</p>
+    <p class="prepared">Prepared for the Infrastructure Steering Committee<br />July 22, 2026</p>
+  </div>
+  <div class="page-footer">Confidential — Internal Use Only <span class="page-number"></span></div>
+</div>
+
+<div class="page" id="page2">
+  <div class="page-header">Annual Infrastructure Report 2026 <span class="dim">— Summary</span></div>
+
+  <h2>Executive Summary</h2>
+  <p>
+    Uptime held at 99.97% across all production regions this fiscal year,
+    against a 99.95% SLA target. Incident count dropped 34% year-over-year
+    following the migration to the new deploy pipeline. Cloud spend grew 12%,
+    in line with traffic growth of 15%, meaning cost-per-request actually improved.
+  </p>
+
+  <h2>Regional Uptime</h2>
+  <table>
+    <thead>
+      <tr><th>Region</th><th>Uptime</th><th>Incidents</th><th>MTTR</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>us-east-1</td><td>99.98%</td><td>4</td><td>18m</td></tr>
+      <tr><td>us-west-2</td><td>99.99%</td><td>2</td><td>11m</td></tr>
+      <tr><td>eu-central-1</td><td>99.95%</td><td>7</td><td>26m</td></tr>
+      <tr><td>ap-southeast-1</td><td>99.96%</td><td>5</td><td>22m</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <strong>Deploy pipeline migration paid off.</strong> The 34% incident
+    reduction is directly attributable to canary deploys catching regressions
+    before full rollout — 11 of 18 incidents last year would have been caught pre-migration.
+  </div>
+
+  <div class="page-footer">Confidential — Internal Use Only <span class="page-number"></span></div>
+</div>
+
+<div class="page" id="page3">
+  <div class="page-header">Annual Infrastructure Report 2026 <span class="dim">— Spend &amp; Outlook</span></div>
+
+  <h2>Monthly Cloud Spend</h2>
+  <figure>
+    <canvas id="spendChart" height="90"></canvas>
+  </figure>
+
+  <div class="callout warn">
+    <strong>Q4 spend needs a closer look.</strong> The November spike
+    correlates with an under-provisioned autoscaling group in eu-central-1 —
+    already patched, but worth a line item in next quarter's cost review.
+  </div>
+
+  <h2>FY2027 Priorities</h2>
+  <ol>
+    <li>Extend canary deploys to the data pipeline services (currently blue/green only).</li>
+    <li>Reduce eu-central-1 MTTR toward the 15-minute regional average.</li>
+    <li>Right-size autoscaling groups flagged in the Q4 spend review.</li>
+  </ol>
+
+  <div class="page-footer">Confidential — Internal Use Only <span class="page-number"></span></div>
+</div>
+
+<script>
+  new Chart(document.getElementById('spendChart'), {
+    type: 'line',
+    data: {
+      labels: ['Aug','Sep','Oct','Nov','Dec','Jan'],
+      datasets: [{
+        label: 'Cloud spend ($K)',
+        data: [412, 428, 435, 501, 461, 449],
+        borderColor: '#2a4d8f',
+        backgroundColor: 'rgba(42,77,143,0.15)',
+        fill: true,
+        tension: 0.3,
+      }]
+    },
+    options: { responsive: true, plugins: { legend: { display: false } } }
+  });
+</script>
+</body>
+</html>
