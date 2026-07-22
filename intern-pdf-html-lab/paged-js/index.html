@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Engineering New Hire Handbook (Paged.js)</title>
+<link rel="stylesheet" href="./style.css" />
+<script src="./vendor/paged.polyfill.min.js"></script>
+</head>
+<body>
+
+<div class="cover">
+  <p class="brand">Acme Analytics · Engineering</p>
+  <h1>New Hire Handbook</h1>
+  <p class="subtitle">A guide for your first 90 days</p>
+</div>
+
+<div class="toc-page">
+  <h2>Contents</h2>
+  <ul class="toc-list">
+    <li><a href="#sec-welcome">Welcome to the Team</a><span class="toc-dots"></span><a href="#sec-welcome" class="toc-page-num"></a></li>
+    <li><a href="#sec-weeks">Your First Two Weeks</a><span class="toc-dots"></span><a href="#sec-weeks" class="toc-page-num"></a></li>
+    <li><a href="#sec-practices">Engineering Practices</a><span class="toc-dots"></span><a href="#sec-practices" class="toc-page-num"></a></li>
+    <li><a href="#sec-time">How Engineers Spend Their Time</a><span class="toc-dots"></span><a href="#sec-time" class="toc-page-num"></a></li>
+    <li><a href="#sec-directory">Appendix: Team Directory</a><span class="toc-dots"></span><a href="#sec-directory" class="toc-page-num"></a></li>
+  </ul>
+  <p style="font-size:0.8rem;color:#888;margin-top:2rem;">
+    Page numbers above are computed automatically by Paged.js using
+    <code>target-counter(attr(href), page)</code> — they stay correct even
+    if content shifts, because Paged.js paginates first and resolves the
+    references afterward.
+  </p>
+</div>
+
+<section id="sec-welcome" class="chapter" data-title="Welcome to the Team">
+  <h2>1. Welcome to the Team</h2>
+  <p>
+    We're glad you're here. This handbook covers what to expect in your
+    first two weeks, how the engineering org works day-to-day, and the
+    practical logistics (badges, benefits, equipment) that don't fit neatly
+    anywhere else. Unlike the two other examples in this lab
+    (<code>custom-print-css</code>, which hand-splits content into fixed-size
+    page blocks), this document is written as one continuous flow of HTML —
+    Paged.js measures it and decides where each page break falls automatically.
+  </p>
+  <p>
+    That matters in practice: edit a paragraph above, add a sentence, and
+    every page break, running header, and page number in this document
+    recalculates itself. Nothing here is hand-positioned.
+  </p>
+  <div class="callout tip">
+    <strong>Try it yourself.</strong> Open <code>index.html</code>, add a
+    paragraph anywhere in this section, and reload — the Contents page
+    numbers and every page break after this point update automatically.
+  </div>
+</section>
+
+<section id="sec-weeks" class="chapter" data-title="Your First Two Weeks">
+  <h2>2. Your First Two Weeks</h2>
+  <p>
+    The first two weeks are deliberately light on output expectations and
+    heavy on context-building. You'll pair with your onboarding buddy most
+    afternoons, and mornings are yours for setup, reading, and small
+    warm-up tasks.
+  </p>
+  <p><strong>Week 1</strong></p>
+  <ul>
+    <li>Laptop setup, VPN, and access provisioning (day 1)</li>
+    <li>Architecture overview sessions with each team lead</li>
+    <li>Ship your first "good first issue" pull request</li>
+  </ul>
+  <p><strong>Week 2</strong></p>
+  <ul>
+    <li>Shadow an on-call rotation (no pages, just observing)</li>
+    <li>Attend your first sprint planning as a full participant</li>
+    <li>1:1 with your manager to set 30/60/90-day goals</li>
+  </ul>
+  <div class="callout">
+    <strong>No pager duty in week one or two.</strong> You'll be added to
+    the on-call rotation starting week 5, after a shadow rotation and a
+    dedicated incident-response walkthrough.
+  </div>
+</section>
+
+<section id="sec-practices" class="chapter" data-title="Engineering Practices">
+  <h2>3. Engineering Practices</h2>
+  <p>
+    A quick reference for the tools and conventions you'll run into constantly.
+  </p>
+  <table>
+    <thead>
+      <tr><th>Area</th><th>Tool</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Version control</td><td>GitHub</td><td>Trunk-based, short-lived branches, required review</td></tr>
+      <tr><td>CI/CD</td><td>GitHub Actions</td><td>Canary deploys, auto-rollback on error-rate spike</td></tr>
+      <tr><td>Incident response</td><td>PagerDuty</td><td>On-call starts week 5, shadow rotation first</td></tr>
+      <tr><td>Code review</td><td>GitHub PRs</td><td>One approval required, two for `infra/`</td></tr>
+      <tr><td>Docs</td><td>Internal wiki</td><td>Architecture decisions recorded as ADRs</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="sec-time" class="chapter" data-title="How Engineers Spend Their Time">
+  <h2>4. How Engineers Spend Their Time</h2>
+  <p>
+    Based on an internal survey of the engineering org, here's roughly how a
+    typical week breaks down. This is illustrative, not a target — some
+    weeks (launch weeks, incident weeks) look very different.
+  </p>
+  <svg class="chart-svg" viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg">
+    <g font-family="Inter, sans-serif" font-size="11" fill="#333">
+      <rect x="120" y="10"  width="216" height="24" fill="#7a3b12"></rect>
+      <text x="10" y="27">Deep work / coding</text>
+      <text x="342" y="27">45%</text>
+
+      <rect x="120" y="44" width="115" height="24" fill="#a85f2c"></rect>
+      <text x="10" y="61">Meetings</text>
+      <text x="242" y="61">24%</text>
+
+      <rect x="120" y="78" width="96" height="24" fill="#c98b52"></rect>
+      <text x="10" y="95">Code review</text>
+      <text x="222" y="95">20%</text>
+
+      <rect x="120" y="112" width="53" height="24" fill="#e0b487"></rect>
+      <text x="10" y="129">On-call / support</text>
+      <text x="180" y="129">11%</text>
+    </g>
+  </svg>
+</section>
+
+<section id="sec-directory" class="appendix" data-title="Appendix: Team Directory">
+  <h2>Appendix: Team Directory</h2>
+  <p>
+    This example's <code>style.css</code> includes a (disabled) attempt at a
+    landscape appendix page via a named <code>@page wide</code> rule — see the
+    comment there. Paged.js recognizes the page name but doesn't correctly
+    resize mixed-orientation named pages yet (a known open upstream issue:
+    <a href="https://github.com/pagedjs/pagedjs/issues/6">pagedjs/pagedjs#6</a>,
+    <a href="https://github.com/pagedjs/pagedjs/issues/281">#281</a>), so this
+    page stays portrait like the rest of the document rather than breaking
+    the layout with clipped content.
+  </p>
+  <table>
+    <thead>
+      <tr><th>Team</th><th>Lead</th><th>Slack channel</th><th>On-call rotation</th><th>Docs</th><th>Timezone</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Platform</td><td>N. Osei</td><td>#team-platform</td><td>Weekly, Mon 9am handoff</td><td>wiki/platform</td><td>US-East</td></tr>
+      <tr><td>Billing</td><td>S. Kim</td><td>#team-billing</td><td>Weekly, Wed handoff</td><td>wiki/billing</td><td>US-West</td></tr>
+      <tr><td>Mobile</td><td>A. Novak</td><td>#team-mobile</td><td>No pager — business hours only</td><td>wiki/mobile</td><td>US-East</td></tr>
+      <tr><td>Data</td><td>P. Adeyemi</td><td>#team-data</td><td>Weekly, Fri handoff</td><td>wiki/data</td><td>UK</td></tr>
+    </tbody>
+  </table>
+</section>
+
+</body>
+</html>

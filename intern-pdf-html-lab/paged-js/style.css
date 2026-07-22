@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --ink: #1c1c1c;
+  --accent: #7a3b12;
+  --muted: #6b6b6b;
+}
+
+body {
+  font-family: 'Source Serif 4', Georgia, serif;
+  color: var(--ink);
+  line-height: 1.55;
+}
+h1, h2, h3, .brand { font-family: 'Inter', -apple-system, sans-serif; }
+p { orphans: 3; widows: 3; }
+table { width: 100%; border-collapse: collapse; font-family: 'Inter', sans-serif; font-size: 0.85rem; }
+th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid #ddd; }
+thead th { background: #f4efe8; }
+
+.callout {
+  border-left: 4px solid var(--accent);
+  background: #fbf3ea;
+  padding: 0.7rem 1rem;
+  margin: 1rem 0;
+  break-inside: avoid;
+}
+.callout.tip { border-left-color: #2a6f4d; background: #eef7f1; }
+
+/* ---- Page setup: running headers via string-set, auto page numbers via
+   counter(pages) — both are things plain browser CSS cannot reliably do,
+   which is exactly what the Paged.js polyfill adds. ---- */
+@page {
+  size: A4;
+  margin: 24mm 20mm 20mm 20mm;
+  @top-right { content: string(chaptertitle); font-family: 'Inter', sans-serif; font-size: 8.5pt; color: var(--muted); }
+  @bottom-center { content: "Page " counter(page) " of " counter(pages); font-family: 'Inter', sans-serif; font-size: 8.5pt; color: var(--muted); }
+}
+@page :first {
+  @top-right { content: none; }
+  @bottom-center { content: none; }
+}
+@page cover {
+  @top-right { content: none; }
+  @bottom-center { content: none; }
+}
+@page toc {
+  @top-right { content: "Contents"; }
+  @bottom-center { content: "Page " counter(page) " of " counter(pages); font-family: 'Inter', sans-serif; font-size: 8.5pt; color: var(--muted); }
+}
+/* Attempted mixed-orientation named page for the appendix (`page: wide;`
+   below) — Paged.js recognizes the page name but, at the version pinned in
+   package.json, doesn't resize the physical page box AND still lays out
+   the content at the declared wide width, causing overflow/clipping
+   instead of a clean landscape page. Known open upstream issue:
+   https://github.com/pagedjs/pagedjs/issues/6 and
+   https://github.com/pagedjs/pagedjs/issues/281 — left here, disabled, for
+   reference rather than shipping a broken page. */
+@page wide {
+  size: 297mm 210mm;
+}
+
+.cover {
+  page: cover;
+  break-before: page;
+  text-align: center;
+  margin-top: 30%;
+}
+.cover .brand { letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 600; font-size: 0.85rem; }
+.cover h1 { font-size: 2.3rem; margin: 0.5rem 0; }
+.cover .subtitle { color: var(--muted); font-size: 1.1rem; }
+
+.toc-page { page: toc; break-before: page; }
+.toc-page h2 { border-bottom: 2px solid var(--accent); padding-bottom: 0.3rem; }
+.toc-list { list-style: none; padding: 0; font-family: 'Inter', sans-serif; }
+.toc-list li { display: flex; align-items: baseline; margin: 0.6rem 0; }
+.toc-list a { color: var(--ink); text-decoration: none; }
+.toc-dots { flex: 1; border-bottom: 1px dotted #999; margin: 0 0.4em; transform: translateY(-3px); }
+.toc-page-num::after { content: target-counter(attr(href), page); font-weight: 600; }
+
+.chapter { break-before: page; string-set: chaptertitle attr(data-title); }
+.chapter h2 { font-size: 1.4rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.35rem; }
+
+.appendix { break-before: page; string-set: chaptertitle attr(data-title); }
+/* `page: wide;` intentionally not applied here — see the disabled @page wide
+   rule above for why. */
+
+.chart-svg { width: 100%; height: auto; }

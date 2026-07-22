@@ -1,0 +1,19 @@
+{
+  "name": "paged",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "pagedjs": "^0.4.3"
+  },
+  "devDependencies": {
+    "playwright": "^1.61.1"
+  }
+}
