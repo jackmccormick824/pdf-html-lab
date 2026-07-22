@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>html2pdf.js — export a styled HTML div to PDF</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="./vendor/html2pdf.bundle.min.js"></script>
+<style>
+  body { font-family: 'Sora', sans-serif; background: #f2f2f5; margin: 0; padding: 2rem; color: #1a1a1a; }
+  .toolbar { max-width: 720px; margin: 0 auto 1.5rem; }
+  button { background: #16a06a; color: white; border: 0; padding: 10px 18px; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+  #doc { max-width: 720px; margin: 0 auto; background: white; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+
+  .hero { background: linear-gradient(135deg, #16a06a, #0d7a52); color: white; padding: 48px 40px; }
+  .hero .eyebrow { text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.72rem; opacity: 0.85; }
+  .hero h1 { font-size: 2rem; margin: 0.3rem 0; }
+  .hero p { opacity: 0.9; margin: 0; }
+
+  .section { padding: 32px 40px; }
+  .section h2 { font-size: 1.1rem; border-bottom: 2px solid #16a06a; padding-bottom: 6px; }
+
+  .values-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 16px; }
+  .value-card { background: #f6faf8; border: 1px solid #e1ede7; border-radius: 10px; padding: 16px; }
+  .value-card .icon { font-size: 1.4rem; }
+  .value-card h3 { margin: 6px 0 4px; font-size: 0.95rem; }
+  .value-card p { margin: 0; font-size: 0.82rem; color: #555; }
+
+  blockquote { border-left: 4px solid #16a06a; margin: 1.2rem 0; padding: 0.6rem 0 0.6rem 1rem; font-style: italic; color: #2f2f2f; background: #f6faf8; border-radius: 0 8px 8px 0; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 10px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #eee; }
+  thead th { background: #f6faf8; }
+
+  .page-break { break-before: page; }
+  footer { padding: 24px 40px; font-size: 0.75rem; color: #888; border-top: 1px solid #eee; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button id="export">Export this page to PDF</button>
+</div>
+
+<div id="doc">
+  <div class="hero">
+    <p class="eyebrow">Nimbus Analytics · Culture Deck</p>
+    <h1>How We Work</h1>
+    <p>A one-pager on team values, current headcount, and what we're proud of this quarter.</p>
+  </div>
+
+  <div class="section">
+    <h2>Our Values</h2>
+    <div class="values-grid">
+      <div class="value-card"><div class="icon">🎯</div><h3>Ship, then refine</h3><p>Small, frequent releases beat big-bang launches. We'd rather learn from a real user on Tuesday than guess for another month.</p></div>
+      <div class="value-card"><div class="icon">🧩</div><h3>Boring on purpose</h3><p>We reach for the well-understood tool before the exciting new one, especially for anything on the critical path.</p></div>
+      <div class="value-card"><div class="icon">🤝</div><h3>Default to sharing</h3><p>Docs are public inside the company by default. Async-first, meetings are the exception, not the norm.</p></div>
+      <div class="value-card"><div class="icon">🔍</div><h3>Blameless by default</h3><p>Incident reviews focus on systems and process, not individuals — every postmortem asks "what would make this impossible to repeat?"</p></div>
+    </div>
+    <blockquote>"The best team culture doc is the one people actually reread — so we keep this to one page." — Eng leadership, quarterly offsite notes</blockquote>
+  </div>
+
+  <div class="section page-break">
+    <h2>Team Snapshot</h2>
+    <table>
+      <thead><tr><th>Team</th><th>Headcount</th><th>Open roles</th><th>Avg. tenure</th></tr></thead>
+      <tbody>
+        <tr><td>Platform</td><td>14</td><td>2</td><td>2.3 yrs</td></tr>
+        <tr><td>Product Eng</td><td>22</td><td>3</td><td>1.7 yrs</td></tr>
+        <tr><td>Data</td><td>9</td><td>1</td><td>2.9 yrs</td></tr>
+        <tr><td>Design</td><td>6</td><td>0</td><td>2.1 yrs</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Headcount Growth</h2>
+    <canvas id="headcountChart" width="600" height="260"></canvas>
+  </div>
+
+  <footer>Nimbus Analytics · Internal · Generated with html2pdf.js (html2canvas + jsPDF)</footer>
+</div>
+
+<script>
+  new Chart(document.getElementById('headcountChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Q3 25', 'Q4 25', 'Q1 26', 'Q2 26'],
+      datasets: [{ label: 'Headcount', data: [38, 43, 47, 51], backgroundColor: '#16a06a' }]
+    },
+    options: { responsive: false, animation: false, plugins: { legend: { display: false } } }
+  });
+
+  document.getElementById('export').addEventListener('click', () => {
+    const el = document.getElementById('doc');
+    html2pdf().set({
+      margin: 0,
+      filename: 'nimbus-culture-deck.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['css', 'legacy'] },
+    }).from(el).save();
+  });
+</script>
+</body>
+</html>
