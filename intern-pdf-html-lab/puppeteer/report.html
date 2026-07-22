@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Monthly SaaS Metrics Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Manrope', -apple-system, sans-serif; color: #1b1e28; margin: 0; }
+  h1 { font-size: 1.6rem; margin-bottom: 0.2rem; }
+  h2 { font-size: 1.05rem; margin-top: 1.7rem; border-bottom: 2px solid #5b4dff; padding-bottom: 0.25rem; }
+  .subtitle { color: #666; margin-top: 0; }
+  .kpi-row { display: flex; gap: 12px; margin: 1rem 0; }
+  .kpi { flex: 1; border: 1px solid #e2e2ea; border-radius: 8px; padding: 10px 14px; }
+  .kpi .label { font-size: 0.7rem; text-transform: uppercase; color: #888; }
+  .kpi .value { font-size: 1.4rem; font-weight: 800; color: #5b4dff; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 0.75rem 0; }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid #eee; }
+  thead th { background: #f4f3ff; }
+  .callout { border-left: 4px solid #5b4dff; background: #f4f3ff; padding: 0.7rem 1rem; border-radius: 4px; margin: 0.9rem 0; break-inside: avoid; }
+  .callout.warn { border-left-color: #d9534f; background: #fdf1f0; }
+  section { break-inside: avoid; }
+</style>
+</head>
+<body>
+
+  <h1>Monthly SaaS Metrics Report</h1>
+  <p class="subtitle">Nimbus Analytics · June 2026</p>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="label">MRR</div><div class="value">$318K</div></div>
+    <div class="kpi"><div class="label">Net new MRR</div><div class="value">+$24K</div></div>
+    <div class="kpi"><div class="label">Logo churn</div><div class="value">1.8%</div></div>
+    <div class="kpi"><div class="label">CAC payback</div><div class="value">9.4 mo</div></div>
+  </div>
+
+  <section>
+    <h2>MRR Growth (12 months)</h2>
+    <canvas id="mrrChart" width="900" height="320"></canvas>
+  </section>
+
+  <section>
+    <h2>Plan Mix</h2>
+    <table>
+      <thead><tr><th>Plan</th><th>Accounts</th><th>MRR</th><th>% of total</th></tr></thead>
+      <tbody>
+        <tr><td>Starter</td><td>842</td><td>$41K</td><td>13%</td></tr>
+        <tr><td>Team</td><td>311</td><td>$132K</td><td>41%</td></tr>
+        <tr><td>Business</td><td>96</td><td>$98K</td><td>31%</td></tr>
+        <tr><td>Enterprise</td><td>14</td><td>$47K</td><td>15%</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Notes</h2>
+    <div class="callout">
+      <strong>Business tier is the growth engine.</strong> 31% of MRR from
+      just 96 accounts — expansion revenue from this tier alone accounted
+      for 60% of net new MRR this month.
+    </div>
+    <div class="callout warn">
+      <strong>Starter churn ticked up to 4.1%.</strong> Cohort analysis
+      points to onboarding drop-off in week one; a fix is already scoped
+      for next sprint.
+    </div>
+  </section>
+
+  <script>
+    // Puppeteer waits for the 'chart-ready' body attribute before printing,
+    // so the canvas is fully painted before page.pdf() rasterizes it.
+    new Chart(document.getElementById('mrrChart'), {
+      type: 'line',
+      data: {
+        labels: ['Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun'],
+        datasets: [{
+          label: 'MRR ($K)',
+          data: [201, 210, 219, 228, 235, 244, 252, 261, 275, 289, 302, 318],
+          borderColor: '#5b4dff',
+          backgroundColor: 'rgba(91,77,255,0.15)',
+          fill: true,
+          tension: 0.35,
+          pointRadius: 3,
+        }]
+      },
+      options: {
+        responsive: false,
+        animation: false,
+        plugins: { legend: { display: false } }
+      }
+    });
+    document.body.setAttribute('data-chart-ready', 'true');
+  </script>
+</body>
+</html>
